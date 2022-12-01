@@ -1,11 +1,26 @@
-#include <scn/scn.h>
-#include <scn/tuple_return.h>
 #include "aoc.hpp"
+#include <queue>
 
 using namespace std;
 
 int main() {
-  vector<string> file = readinput();
-  auto [r, a, b, c] = scn::scan_tuple<int, string, char>(file[0], "{},{:5},{}");
-  cout << a << " " << b << " " << c << endl;
+  vector<string> v = readinput();
+  priority_queue<int> pq;
+  int r = 0;
+
+  for (auto &x : v) {
+    if (x.size() == 0) {
+      pq.push(r);
+      r = 0;
+    } else {
+      r += stoi(x);
+    }
+  }
+
+  int ans = 0;
+  for (int i = 0; i < 3; ++i) {
+    ans += pq.top(); pq.pop();
+  }
+  
+  cout << ans << endl;
 }
