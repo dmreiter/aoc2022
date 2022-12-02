@@ -3,48 +3,31 @@
 
 using namespace std;
 
-bool win(char a, char b) {
-  if (a == 'X') {
-    if (b == 'B') return false;
-    if (b == 'C') return true;
-  } else if (a == 'Y') {
-    if (b == 'A') return true;
-    if (b == 'C') return false;
-  } else if (a == 'Z') {
-    if (b == 'A') return false;
-    if (b == 'B') return true;
-  }
+// calculate result given two players
+int res(int a, int b) {
+  if (a == b) return 1; // draw
+  return a == ((b + 1) % 3) ? 0 : 2;
 }
 
-char play(char o, char res) {
-  if (res == 'Y') return (o - 'A') + 'X';
-
-  if (o == 'A') {
-    if (res == 'X') return 'Z';
-    if (res == 'Z') return 'Y';
-  } else if (o == 'B') {
-    if (res == 'X') return 'X';
-    if (res == 'Z') return 'Z';
-  } else if (o == 'C') {
-    if (res == 'X') return 'Y';
-    if (res == 'Z') return 'X';
-  }
+// calculate what we should play given one player and outcome
+char play(int a, int b) {
+  if (b == 1) return 'X' + a;
+  else if (b == 0) return 'X' + ((a - 1) < 0 ? 2 : a - 1);
+  else return 'X' + (a + 1) % 3;
 }
 
 int main() {
   vector<string> in = readinput();
-  int score = 0;
+  int q1 = 0, q2 = 0;
+  vector<string> buf;
 
-  for (auto turn : in) {
-    vector<string> s;
-    boost::split(s, turn, boost::is_any_of(" "));
+  for (auto turn : in) {  
+    boost::split(buf, turn, boost::is_space());
+    int p1 = buf[0][0]-'A', p2 = buf[1][0]-'X';
 
-    char my = play(s[0][0], s[1][0]);
-    score += (my - 'X' + 1);
-
-    if (s[1][0] == 'Y') score += 3;
-    else if (s[1][0] == 'Z') score += 6;
+    q1 += (p2 + 1) + res(p1, p2)*3;
+    q2 += (play(p1, p2) - 'X' + 1) + p2*3;
   }
 
-  cout << score << endl;
+  cout << q1 << " " << q2 << endl;
 }
