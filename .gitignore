@@ -1,4 +1,5 @@
 .vscode
 **/build
 lib/
-headers.json
+js/
+scripts/headers.json

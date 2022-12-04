@@ -1,0 +1,1 @@
+cd d$1/build && make && ./out < in.txt
